@@ -24,16 +24,20 @@ app.set('views', path.join(__dirname, 'src/views'));
  * Routes
  * ************************************** */
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     res.render('home', { title: 'Home' });
 });
 
-app.get('/organizations', (req, res) => {
+app.get('/organizations', async (req, res) => {
     res.render('organizations', { title: 'Organizations' });
 });
 
-app.get('/projects', (req, res) => {
+app.get('/projects', async (req, res) => {
     res.render('projects', { title: 'Projects' });
+});
+
+app.get('/categories', async (req, res) => {
+    res.render('categories', { title: 'Categories' });
 });
 
 app.listen(PORT, () => {
