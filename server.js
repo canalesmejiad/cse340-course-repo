@@ -14,23 +14,26 @@ const app = express();
  * Configure Express middleware
  * ************************************** */
 
-// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('view engine', 'ejs');
+
+app.set('views', path.join(__dirname, 'src/views'));
 
 /* ***************************************
  * Routes
  * ************************************** */
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/views/home.html'));
+    res.render('home', { title: 'Home' });
 });
 
 app.get('/organizations', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/views/organizations.html'));
+    res.render('organizations', { title: 'Organizations' });
 });
 
 app.get('/projects', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/views/projects.html'));
+    res.render('projects', { title: 'Projects' });
 });
 
 app.listen(PORT, () => {
