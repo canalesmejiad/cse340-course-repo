@@ -2,10 +2,13 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-import { testConnection } from './src/models/db.js'
-import { getAllOrganizations } from './src/models/organizations.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import { testConnection } from './src/models/db.js';
+
+import { showHomePage } from './src/controllers/index.js';
+import { showOrganizationsPage } from './src/controllers/organizations.js';
+import { showProjectsPage } from './src/controllers/projects.js';
+import { showCategoriesPage } from './src/controllers/categories.js';
+import { testErrorPage } from './src/controllers/errors.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -22,7 +25,6 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
-
 app.set('views', path.join(__dirname, 'src/views'));
 
 // Middleware to log all incoming requests
@@ -44,40 +46,11 @@ app.use((req, res, next) => {
  * Routes
  * ************************************** */
 
-app.get('/', async (req, res) => {
-    res.render('home', { title: 'Home' });
-});
-
-app.get('/organizations', async (req, res) => {
-    const organizations = await getAllOrganizations();
-    console.log(organizations);
-
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title, organizations });
-});
-
-app.get('/projects', async (req, res) => {
-    const projects = await getAllProjects();
-    console.log(projects);
-
-    const title = 'Service Projects';
-    res.render('projects', { title, projects });
-});
-
-app.get('/categories', async (req, res) => {
-    const categories = await getAllCategories();
-    console.log(categories);
-
-    const title = 'Service Categories';
-    res.render('categories', { title, categories });
-});
-
-// Test route for 500 errors
-app.get('/test-error', (req, res, next) => {
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-});
+app.get('/', showHomePage);
+app.get('/organizations', showOrganizationsPage);
+app.get('/projects', showProjectsPage);
+app.get('/categories', showCategoriesPage);
+app.get('/test-error', testErrorPage);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
@@ -88,31 +61,27 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-    // Log error details for debugging
     console.error('Error occurred:', err.message);
     console.error('Stack trace:', err.stack);
 
-    // Determine status and template
     const status = err.status || 500;
     const template = status === 404 ? '404' : '500';
 
-    // Prepare data for the template
     const context = {
         title: status === 404 ? 'Page Not Found' : 'Server Error',
         error: err.message,
         stack: err.stack
     };
 
-    // Render the appropriate error template
     res.status(status).render(`errors/${template}`, context);
 });
 
 app.listen(PORT, async () => {
     try {
-        await testConnection()
-        console.log(`Server is running at http://127.0.0.1:${PORT}`)
-        console.log(`Environment: ${NODE_ENV}`)
+        await testConnection();
+        console.log(`Server is running at http://127.0.0.1:${PORT}`);
+        console.log(`Environment: ${NODE_ENV}`);
     } catch (error) {
-        console.error("Error connecting to the database:", error)
+        console.error('Error connecting to the database:', error);
     }
-})
+});
