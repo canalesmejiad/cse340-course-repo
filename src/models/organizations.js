@@ -1,4 +1,4 @@
-import db from './db.js'
+import db from './db.js';
 
 const getAllOrganizations = async () => {
     const query = `
@@ -9,25 +9,24 @@ const getAllOrganizations = async () => {
     const result = await db.query(query);
 
     return result.rows;
-}
-const getProjectsByOrganizationId = async (organizationId) => {
+};
+
+const getOrganizationDetails = async (organizationId) => {
     const query = `
         SELECT
-            project_id,
             organization_id,
-            title,
+            name,
             description,
-            location,
-            date
-        FROM project
-        WHERE organization_id = $1
-        ORDER BY date;
+            contact_email,
+            logo_filename
+        FROM organization
+        WHERE organization_id = $1;
     `;
 
     const queryParams = [organizationId];
     const result = await db.query(query, queryParams);
 
-    return result.rows;
+    return result.rows.length > 0 ? result.rows[0] : null;
 };
 
-export { getAllProjects, getProjectsByOrganizationId };
+export { getAllOrganizations, getOrganizationDetails };
