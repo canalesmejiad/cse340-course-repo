@@ -11,9 +11,11 @@
             <% organizations.forEach(organization=> { %>
                 <li>
                     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
-                    <h2>
+                    
+                    <a href="/organization/<%= organization.organization_id %>">
                         <%= organization.name %>
-                    </h2>
+                    </a>
+                    
                     <p>
                         <%= organization.description %>
                     </p>
