@@ -2,13 +2,10 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+import router from './src/routes.js';
+
 import { testConnection } from './src/models/db.js';
 
-import { showHomePage } from './src/controllers/index.js';
-import { showOrganizationsPage } from './src/controllers/organizations.js';
-import { showProjectsPage } from './src/controllers/projects.js';
-import { showCategoriesPage } from './src/controllers/categories.js';
-import { testErrorPage } from './src/controllers/errors.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -46,11 +43,7 @@ app.use((req, res, next) => {
  * Routes
  * ************************************** */
 
-app.get('/', showHomePage);
-app.get('/organizations', showOrganizationsPage);
-app.get('/projects', showProjectsPage);
-app.get('/categories', showCategoriesPage);
-app.get('/test-error', testErrorPage);
+app.use(router);
 
 // Catch-all route for 404 errors
 app.use((req, res, next) => {
