@@ -11,20 +11,27 @@
             <% organizations.forEach(organization=> { %>
                 <li>
                     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
-                    
+
                     <a href="/organization/<%= organization.organization_id %>">
                         <%= organization.name %>
                     </a>
-                    
+
                     <p>
                         <%= organization.description %>
                     </p>
+
                     <p>
                         <%= organization.contact_email %>
                     </p>
                 </li>
                 <% }) %>
         </ul>
+
+        <p>
+            <a href="/new-organization">
+                Add a new organization
+            </a>
+        </p>
     </main>
 
     <%- include('partials/footer') %>
