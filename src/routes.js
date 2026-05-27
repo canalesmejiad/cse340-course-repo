@@ -5,7 +5,8 @@ import { showHomePage } from './controllers/index.js';
 import {
     showOrganizationsPage,
     showOrganizationDetailsPage,
-    showNewOrganizationForm
+    showNewOrganizationForm,
+    processNewOrganizationForm
 } from './controllers/organizations.js';
 
 import {
@@ -30,6 +31,9 @@ router.get('/organization/:id', showOrganizationDetailsPage);
 
 // Route for new organization page
 router.get('/new-organization', showNewOrganizationForm);
+
+// Route to handle new organization form submission
+router.post('/new-organization', processNewOrganizationForm);
 
 router.get('/projects', showProjectsPage);
 

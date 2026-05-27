@@ -6,7 +6,6 @@ import router from './src/routes.js';
 
 import { testConnection } from './src/models/db.js';
 
-
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +17,10 @@ const app = express();
 /* ***************************************
  * Configure Express middleware
  * ************************************** */
+
+// Allow Express to receive and process common POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
