@@ -16,7 +16,8 @@ import {
     showProjectsPage,
     showProjectDetailsPage,
     showNewProjectForm,
-    processNewProjectForm
+    processNewProjectForm,
+    projectValidation
 } from './controllers/projects.js';
 
 import {
@@ -60,8 +61,11 @@ router.get('/project/:id', showProjectDetailsPage);
 // Route for new project page
 router.get('/new-project', showNewProjectForm);
 
-// Route to handle new project form submission
-router.post('/new-project', processNewProjectForm);
+router.post(
+    '/new-project',
+    projectValidation,
+    processNewProjectForm
+);
 
 router.get('/categories', showCategoriesPage);
 
