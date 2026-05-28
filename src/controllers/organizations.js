@@ -60,6 +60,18 @@ const showNewOrganizationForm = async (req, res) => {
     res.render('new-organization', { title });
 };
 
+const showEditOrganizationForm = async (req, res) => {
+    const organizationId = req.params.id;
+    const organizationDetails = await getOrganizationDetails(organizationId);
+
+    const title = 'Edit Organization';
+
+    res.render('edit-organization', {
+        title,
+        organizationDetails
+    });
+};
+
 const processNewOrganizationForm = async (req, res) => {
     // Check for validation errors
     const results = validationResult(req);
@@ -91,6 +103,7 @@ export {
     showOrganizationsPage,
     showOrganizationDetailsPage,
     showNewOrganizationForm,
+    showEditOrganizationForm,
     processNewOrganizationForm,
     organizationValidation
-};  
+};
