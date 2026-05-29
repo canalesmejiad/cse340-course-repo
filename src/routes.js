@@ -22,7 +22,9 @@ import {
 
 import {
     showCategoriesPage,
-    showCategoryDetailsPage
+    showCategoryDetailsPage,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm
 } from './controllers/categories.js';
 
 import { testErrorPage } from './controllers/errors.js';
@@ -40,6 +42,11 @@ router.get('/new-organization', showNewOrganizationForm);
 
 // Route to display the edit organization form
 router.get('/edit-organization/:id', showEditOrganizationForm);
+
+// Routes to handle the assign categories to project form
+router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
+
+router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
 
 // Route to handle new organization form submission
 router.post(
