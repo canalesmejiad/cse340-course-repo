@@ -1,84 +1,92 @@
-import express from 'express';
+    import express from 'express';
 
-import { showHomePage } from './controllers/index.js';
+    import { showHomePage } from './controllers/index.js';
 
-import {
-    showOrganizationsPage,
-    showOrganizationDetailsPage,
-    showNewOrganizationForm,
-    showEditOrganizationForm,
-    processNewOrganizationForm,
-    processEditOrganizationForm,
-    organizationValidation
-} from './controllers/organizations.js';
+    import {
+        showOrganizationsPage,
+        showOrganizationDetailsPage,
+        showNewOrganizationForm,
+        showEditOrganizationForm,
+        processNewOrganizationForm,
+        processEditOrganizationForm,
+        organizationValidation
+    } from './controllers/organizations.js';
 
-import {
-    showProjectsPage,
-    showProjectDetailsPage,
-    showNewProjectForm,
-    processNewProjectForm,
-    projectValidation
-} from './controllers/projects.js';
+    import {
+        showProjectsPage,
+        showProjectDetailsPage,
+        showNewProjectForm,
+        showEditProjectForm,
+        processNewProjectForm,
+        processEditProjectForm,
+        projectValidation
+    } from './controllers/projects.js';
 
-import {
-    showCategoriesPage,
-    showCategoryDetailsPage,
-    showAssignCategoriesForm,
-    processAssignCategoriesForm
-} from './controllers/categories.js';
+    import {
+        showCategoriesPage,
+        showCategoryDetailsPage,
+        showAssignCategoriesForm,
+        processAssignCategoriesForm
+    } from './controllers/categories.js';
 
-import { testErrorPage } from './controllers/errors.js';
+    import { testErrorPage } from './controllers/errors.js';
 
-const router = express.Router();
+    const router = express.Router();
 
-router.get('/', showHomePage);
+    router.get('/', showHomePage);
 
-router.get('/organizations', showOrganizationsPage);
+    router.get('/organizations', showOrganizationsPage);
 
-router.get('/organization/:id', showOrganizationDetailsPage);
+    router.get('/organization/:id', showOrganizationDetailsPage);
 
-// Route for new organization page
-router.get('/new-organization', showNewOrganizationForm);
+    // Route for new organization page
+    router.get('/new-organization', showNewOrganizationForm);
 
-// Route to display the edit organization form
-router.get('/edit-organization/:id', showEditOrganizationForm);
+    // Route to display the edit organization form
+    router.get('/edit-organization/:id', showEditOrganizationForm);
 
-// Routes to handle the assign categories to project form
-router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
+    // Route to display the edit project form
+    router.get('/edit-project/:id', showEditProjectForm);
 
-router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
+    // Routes to handle the assign categories to project form
+    router.get('/project/:projectId/assign-categories', showAssignCategoriesForm);
 
-// Route to handle new organization form submission
-router.post(
-    '/new-organization',
-    organizationValidation,
-    processNewOrganizationForm
-);
+    // Route to handle edit project form submission
+    router.post('/edit-project/:id', processEditProjectForm);
 
-router.post(
-    '/edit-organization/:id',
-    organizationValidation,
-    processEditOrganizationForm
-);
+    router.post('/project/:projectId/assign-categories', processAssignCategoriesForm);
 
-router.get('/projects', showProjectsPage);
+    // Route to handle new organization form submission
+    router.post(
+        '/new-organization',
+        organizationValidation,
+        processNewOrganizationForm
+    );
 
-router.get('/project/:id', showProjectDetailsPage);
+    router.post(
+        '/edit-organization/:id',
+        organizationValidation,
+        processEditOrganizationForm
+    );
 
-// Route for new project page
-router.get('/new-project', showNewProjectForm);
+    router.get('/projects', showProjectsPage);
 
-router.post(
-    '/new-project',
-    projectValidation,
-    processNewProjectForm
-);
+    router.get('/project/:id', showProjectDetailsPage);
 
-router.get('/categories', showCategoriesPage);
+    // Route for new project page
+    router.get('/new-project', showNewProjectForm);
 
-router.get('/category/:id', showCategoryDetailsPage);
+    router.post(
+        '/new-project',
+        projectValidation,
+        processNewProjectForm
+    );
 
-// Error-handling route
-router.get('/test-error', testErrorPage);
+    router.get('/categories', showCategoriesPage);
 
-export default router;
+    router.get('/category/:id', showCategoryDetailsPage);
+
+    // Error-handling route
+    router.get('/test-error', testErrorPage);
+
+    export default router;
