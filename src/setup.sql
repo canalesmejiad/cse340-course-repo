@@ -153,5 +153,8 @@ CREATE TABLE users (
 );
 
 Email: test@example.com
-
 Password: password123
+
+Name: admin
+Email: admin@example.com
+Password: cse340!
