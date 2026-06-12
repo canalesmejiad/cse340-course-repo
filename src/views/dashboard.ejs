@@ -17,6 +17,39 @@
             <%= email %>
         </p>
 
+        <hr>
+
+<h3>Projects I Volunteered For</h3>
+
+<% if (volunteeredProjects.length > 0) { %>
+    <ul>
+        <% volunteeredProjects.forEach(project => { %>
+            <li>
+                <a href="/project/<%= project.project_id %>">
+                    <%= project.title %>
+                </a>
+
+                -
+
+                <%= project.organization_name %>
+
+                <form
+                    action="/project/<%= project.project_id %>/remove-volunteer"
+                    method="POST"
+                >
+                    <button type="submit">
+                        Remove Volunteer
+                    </button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <p>
+        You have not volunteered for any projects yet.
+    </p>
+<% } %>
+
         <% if (user && user.role_name==='admin' ) { %>
 
             <hr>

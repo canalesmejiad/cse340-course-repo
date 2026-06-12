@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS project_volunteer;
 DROP TABLE IF EXISTS project_category;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS project;
@@ -16,7 +17,14 @@ VALUES
 ('user', 'Standard user with basic access'),
 ('admin', 'Administrator with full system access');
 
-SELECT * FROM roles;
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INTEGER REFERENCES roles(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE organization (
     organization_id SERIAL PRIMARY KEY,
@@ -47,8 +55,6 @@ VALUES
     'hello@unityserve.org',
     'unityserve-logo.png'
 );
-
-SELECT * FROM organization;
 
 CREATE TABLE project (
     project_id SERIAL PRIMARY KEY,
@@ -85,12 +91,18 @@ VALUES
 (3, 'Volunteer Training Day', 'Train new volunteers for service projects.', 'Idaho Falls, Idaho', '2026-09-16'),
 (3, 'Community Health Fair', 'Host free health screenings and wellness education.', 'Pocatello, Idaho', '2026-10-28');
 
-SELECT * FROM project;
-
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
 );
+
+INSERT INTO category (name)
+VALUES
+('Construction'),
+('Environment'),
+('Community Service'),
+('Education'),
+('Health');
 
 CREATE TABLE project_category (
     project_id INTEGER NOT NULL,
@@ -108,14 +120,6 @@ CREATE TABLE project_category (
         REFERENCES category(category_id)
         ON DELETE CASCADE
 );
-
-INSERT INTO category (name)
-VALUES
-('Construction'),
-('Environment'),
-('Community Service'),
-('Education'),
-('Health');
 
 INSERT INTO project_category (project_id, category_id)
 VALUES
@@ -135,26 +139,23 @@ VALUES
 (14, 4),
 (15, 5);
 
-SELECT
-    p.title,
-    c.name AS category
-FROM project p
-JOIN project_category pc ON p.project_id = pc.project_id
-JOIN category c ON pc.category_id = c.category_id
-ORDER BY p.project_id;
-
-CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    role_id INTEGER REFERENCES roles(role_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE project_volunteer (
+    user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    project_id INTEGER NOT NULL REFERENCES project(project_id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, project_id)
 );
+
+SELECT * FROM roles;
+SELECT * FROM organization;
+SELECT * FROM project;
+SELECT * FROM category;
+SELECT * FROM project_category;
+SELECT * FROM project_volunteer;
 
 Email: test@example.com
 Password: password123
 
-Name: admin
-Email: admin@example.com
-Password: cse340!
+Name: David
+Email: david@test.com
+Password: Password123

@@ -4,7 +4,10 @@ import {
     getUpcomingProjects,
     getProjectDetails,
     createProject,
-    updateProject
+    updateProject,
+    addProjectVolunteer,
+    removeProjectVolunteer,
+    isUserVolunteeringForProject
 } from '../models/projects.js';
 
 import {
@@ -72,12 +75,22 @@ const showProjectDetailsPage = async (req, res) => {
 
     const categories = await getCategoriesByProjectId(projectId);
 
+    let isVolunteering = false;
+
+    if (req.session.user) {
+        isVolunteering = await isUserVolunteeringForProject(
+            req.session.user.user_id,
+            projectId
+        );
+    }
+
     const title = 'Project Details';
 
     res.render('project', {
         title,
         project,
-        categories
+        categories,
+        isVolunteering
     });
 };
 
@@ -188,6 +201,40 @@ const processNewProjectForm = async (req, res) => {
     }
 };
 
+const volunteerForProject = async (req, res) => {
+    const userId = req.session.user.user_id;
+    const projectId = req.params.id;
+
+    await addProjectVolunteer(
+        userId,
+        projectId
+    );
+
+    req.flash(
+        'success',
+        'You are now volunteering for this project.'
+    );
+
+    res.redirect(`/project/${projectId}`);
+};
+
+const removeVolunteerFromProject = async (req, res) => {
+    const userId = req.session.user.user_id;
+    const projectId = req.params.id;
+
+    await removeProjectVolunteer(
+        userId,
+        projectId
+    );
+
+    req.flash(
+        'success',
+        'You have been removed as a volunteer.'
+    );
+
+    res.redirect(`/project/${projectId}`);
+};
+
 export {
     showProjectsPage,
     showProjectDetailsPage,
@@ -195,5 +242,7 @@ export {
     showEditProjectForm,
     processNewProjectForm,
     processEditProjectForm,
-    projectValidation
+    projectValidation,
+    volunteerForProject,
+    removeVolunteerFromProject
 };

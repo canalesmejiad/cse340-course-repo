@@ -19,7 +19,9 @@ import {
     showEditProjectForm,
     processNewProjectForm,
     processEditProjectForm,
-    projectValidation
+    projectValidation,
+    volunteerForProject,
+    removeVolunteerFromProject
 } from './controllers/projects.js';
 
 import {
@@ -86,6 +88,18 @@ router.post(
 // Public project routes
 router.get('/projects', showProjectsPage);
 router.get('/project/:id', showProjectDetailsPage);
+
+router.post(
+    '/project/:id/volunteer',
+    requireLogin,
+    volunteerForProject
+);
+
+router.post(
+    '/project/:id/remove-volunteer',
+    requireLogin,
+    removeVolunteerFromProject
+);
 
 // Admin project routes
 router.get(
